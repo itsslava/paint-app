@@ -1,0 +1,7 @@
+@use '@styles/_variables.scss' as v;
+
+.app {
+	height: 100vh;
+	width: 100vw;
+	background-color: v.$background-color;
+}

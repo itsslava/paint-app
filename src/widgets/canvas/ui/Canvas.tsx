@@ -1,3 +1,5 @@
+import styles from './canvas.module.scss';
+
 type Props = {
 	width?: number;
 	height?: number;
@@ -5,7 +7,7 @@ type Props = {
 
 const Canvas = ({ width = 800, height = 600 }: Props) => {
 	return (
-		<div>
+		<div className={styles.canvas}>
 			<canvas width={width} height={height} />
 		</div>
 	);

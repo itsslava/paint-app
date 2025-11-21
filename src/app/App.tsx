@@ -1,8 +1,11 @@
+import { Canvas } from '@widgets/canvas';
+import styles from './app.module.scss';
+
 function App() {
 	return (
-		<>
-			<h1>Paint</h1>
-		</>
+		<div className={styles.app}>
+			<Canvas />
+		</div>
 	);
 }
 
