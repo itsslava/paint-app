@@ -1,0 +1,26 @@
+/* colors */
+$text-color: #0f172a;
+$accent-color: #3b82f6;
+$background-color: #f6f6f6;
+
+/* measures */
+$bar-height: 44px;
+
+/* transitions */
+$transition-fast: 0.15s ease;
+$transition-medium: 0.25s ease;
+
+:root {
+	/* colors */
+	--color-text: #{$text-color};
+	--color-accent: #{$accent-color};
+	--color-bg: #{$background-color};
+
+	/* typography */
+	--font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+		sans-serif;
+
+	/* transitions */
+	--transition-fast: #{$transition-fast};
+	--transition-medium: #{$transition-medium};
+}
