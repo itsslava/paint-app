@@ -1,20 +1,25 @@
-import { IconButton } from '@shared/ui';
-import styles from './toolbar.module.scss';
-import { BrushIcon } from '@shared/icons';
 import { observer } from 'mobx-react-lite';
 import toolState, { type ToolType } from '@shared/store/toolState';
 import canvasState from '@shared/store/canvasState';
-import { Brush } from '@shared/tools';
+import { IconButton } from '@shared/ui';
+import { Brush, Line } from '@shared/tools';
+import { BrushIcon, LineIcon } from '@shared/icons';
+
+import styles from './toolbar.module.scss';
 
 const ToolBar = observer(() => {
 	const activeTool = toolState.activeTool;
-	const canvas = canvasState.canvas;
 
 	const handleSelect = (key: ToolType) => {
+		const canvas = canvasState.canvas;
+
 		if (!canvas) return;
 
 		if (key === 'brush') {
 			const instance = new Brush(canvas);
+			toolState.setTool(instance, key);
+		} else if (key === 'line') {
+			const instance = new Line(canvas);
 			toolState.setTool(instance, key);
 		}
 	};
@@ -24,10 +29,18 @@ const ToolBar = observer(() => {
 				<IconButton
 					label="Brush"
 					active={activeTool === 'brush'}
-					disabled={!canvas}
+					disabled={!canvasState.canvas}
 					onClick={() => handleSelect('brush')}
 				>
 					<BrushIcon className={styles.toolbar__icon} />
+				</IconButton>
+				<IconButton
+					label="Line"
+					active={activeTool === 'line'}
+					disabled={!canvasState.canvas}
+					onClick={() => handleSelect('line')}
+				>
+					<LineIcon className={styles.toolbar__icon} />
 				</IconButton>
 			</div>
 			<div className={styles.toolbar__group} role="group" aria-label="Actions"></div>
