@@ -17,6 +17,14 @@ export default class Tool {
 	protected onMouseUp(): void {}
 	protected onMouseMove(): void {}
 
+	protected getPos(e: MouseEvent): { x: number; y: number } {
+		const rect = this.canvas.getBoundingClientRect();
+		return {
+			x: e.clientX - rect.left,
+			y: e.clientY - rect.top,
+		};
+	}
+
 	destroy() {
 		this.canvas.onmousedown = null;
 		this.canvas.onmouseup = null;
