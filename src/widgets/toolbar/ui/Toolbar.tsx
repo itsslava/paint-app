@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite';
 import toolState, { type ToolType } from '@shared/store/toolState';
 import canvasState from '@shared/store/canvasState';
 import { IconButton } from '@shared/ui';
-import { Brush, Circle, Line, Rectangle, Tool } from '@shared/tools';
-import { BrushIcon, CircleIcon, LineIcon, RectangleIcon } from '@shared/icons';
+import { Brush, Circle, Eraser, Line, Rectangle, Tool } from '@shared/tools';
+import { BrushIcon, CircleIcon, EraserIcon, LineIcon, RectangleIcon } from '@shared/icons';
 
 import styles from './toolbar.module.scss';
 import type { JSX } from 'react';
@@ -13,6 +13,7 @@ const toolFactory: Partial<Record<ToolType, new (canvas: HTMLCanvasElement) => T
 	line: Line,
 	rectangle: Rectangle,
 	circle: Circle,
+	eraser: Eraser,
 };
 
 const toolButtons: Array<{
@@ -24,6 +25,7 @@ const toolButtons: Array<{
 	{ key: 'line', label: 'Line', Icon: LineIcon },
 	{ key: 'rectangle', label: 'Rectangle', Icon: RectangleIcon },
 	{ key: 'circle', label: 'Circle', Icon: CircleIcon },
+	{ key: 'eraser', label: 'Eraser', Icon: EraserIcon },
 ];
 
 const ToolBar = observer(() => {
