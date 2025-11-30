@@ -6,6 +6,7 @@ export default abstract class Tool {
 		this.canvas = canvas;
 
 		const context = this.canvas.getContext('2d');
+
 		if (!context) {
 			throw new Error('Could not get 2D context from canvas');
 		}
@@ -15,13 +16,13 @@ export default abstract class Tool {
 		this.attach();
 	}
 
-	private attach(): void {
+	protected attach(): void {
 		this.canvas.addEventListener('mousedown', this._onMouseDown);
 		this.canvas.addEventListener('mousemove', this._onMouseMove);
 		window.addEventListener('mouseup', this._onMouseUp);
 	}
 
-	destroy(): void {
+	protected destroy(): void {
 		this.canvas.removeEventListener('mousedown', this._onMouseDown);
 		this.canvas.removeEventListener('mousemove', this._onMouseMove);
 		window.removeEventListener('mouseup', this._onMouseUp);

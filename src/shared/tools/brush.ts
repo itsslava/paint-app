@@ -5,6 +5,12 @@ export default class Brush extends Tool {
 
 	constructor(canvas: HTMLCanvasElement) {
 		super(canvas);
+		this.canvas.addEventListener('mouseleave', this.onMouseLeave);
+	}
+
+	protected override destroy(): void {
+		this.canvas.removeEventListener('mouseleave', this.onMouseLeave);
+		super.destroy();
 	}
 
 	protected override onMouseDown(e: MouseEvent): void {
@@ -29,6 +35,13 @@ export default class Brush extends Tool {
 
 		this.ctx.closePath();
 	}
+
+	private onMouseLeave = (): void => {
+		if (!this.isDrawing) return;
+
+		this.isDrawing = false;
+		this.ctx.closePath();
+	};
 
 	private draw(x: number, y: number): void {
 		this.ctx.lineTo(x, y);
