@@ -1,0 +1,27 @@
+@use '../../../shared/styles/variables' as v;
+
+.settingsbar {
+	height: v.$bar-height;
+	background-color: #fff;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	width: 100%;
+	box-shadow: 0 4px 5px 0 rgb(205 205 205);
+	top: v.$bar-height;
+	justify-content: space-between;
+	padding: 0 10px;
+	z-index: 10;
+
+	&__group {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	&__icon {
+		width: 28px;
+		height: 28px;
+		display: block;
+	}
+}
