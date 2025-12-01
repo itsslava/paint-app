@@ -45,5 +45,6 @@ export default class Rectangle extends Tool {
 		this.ctx.beginPath();
 		this.ctx.rect(x, y, width, height);
 		this.ctx.stroke();
+		this.ctx.fill();
 	}
 }

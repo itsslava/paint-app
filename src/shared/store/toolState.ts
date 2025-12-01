@@ -23,6 +23,23 @@ class ToolState {
 	setActiveTool(toolKey: ToolType | null) {
 		this.activeTool = toolKey;
 	}
+
+	setStrokeColor(color: string) {
+		if (this.tool) {
+			this.tool.strokeColor = color;
+		}
+	}
+	setFillColor(color: string) {
+		if (this.tool) {
+			this.tool.fillColor = color;
+		}
+	}
+	setLineWidth(width: number) {
+		if (!this.tool) return;
+		if (!Number.isFinite(width) || width <= 0) return;
+
+		this.tool.lineWidth = width;
+	}
 }
 
 const toolState = new ToolState();

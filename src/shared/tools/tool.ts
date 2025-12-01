@@ -22,7 +22,7 @@ export default abstract class Tool {
 		window.addEventListener('mouseup', this._onMouseUp);
 	}
 
-	protected destroy(): void {
+	destroy(): void {
 		this.canvas.removeEventListener('mousedown', this._onMouseDown);
 		this.canvas.removeEventListener('mousemove', this._onMouseMove);
 		window.removeEventListener('mouseup', this._onMouseUp);
@@ -51,5 +51,15 @@ export default abstract class Tool {
 			x: e.clientX - rect.left,
 			y: e.clientY - rect.top,
 		};
+	}
+
+	set strokeColor(color: string) {
+		this.ctx.strokeStyle = color;
+	}
+	set fillColor(color: string) {
+		this.ctx.fillStyle = color;
+	}
+	set lineWidth(width: number) {
+		this.ctx.lineWidth = width;
 	}
 }

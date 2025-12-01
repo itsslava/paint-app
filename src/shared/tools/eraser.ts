@@ -8,7 +8,7 @@ export default class Eraser extends Tool {
 		this.canvas.addEventListener('mouseleave', this.onMouseLeave);
 	}
 
-	protected override destroy(): void {
+	override destroy(): void {
 		this.canvas.removeEventListener('mouseleave', this.onMouseLeave);
 		super.destroy();
 	}
