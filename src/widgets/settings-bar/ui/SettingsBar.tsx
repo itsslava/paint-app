@@ -9,6 +9,7 @@ const SettingsBar = () => {
 				<input
 					id="stroke-color"
 					type="color"
+					className={styles['settingsbar__color-input']}
 					onChange={(e) => toolState.setStrokeColor(e.target.value)}
 				/>
 			</div>
@@ -17,6 +18,7 @@ const SettingsBar = () => {
 				<input
 					id="fill-color"
 					type="color"
+					className={styles['settingsbar__color-input']}
 					onChange={(e) => toolState.setFillColor(e.target.value)}
 				/>
 			</div>
@@ -28,6 +30,7 @@ const SettingsBar = () => {
 					min={1}
 					max={50}
 					defaultValue={1}
+					className={styles['settingsbar__number-input']}
 					onChange={(e) => toolState.setLineWidth(Number(e.target.value))}
 				/>
 			</div>
