@@ -50,6 +50,17 @@ class CanvasState {
 		};
 	}
 
+	clear() {
+		if (!this.canvas) return;
+
+		this.saveCurrentToUndo();
+
+		const ctx = this.canvas.getContext('2d');
+		if (!ctx) return;
+
+		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	}
+
 	undo() {
 		if (!this.canvas) return;
 		if (this.undoStack.length === 0) return;
@@ -62,6 +73,7 @@ class CanvasState {
 
 		this.drawFromDataUrl(dataUrl);
 	}
+
 	redo() {
 		if (!this.canvas) return;
 		if (this.redoStack.length === 0) return;

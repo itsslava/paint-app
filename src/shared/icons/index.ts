@@ -6,3 +6,4 @@ export { default as EraserIcon } from './EraserIcon';
 export { default as UndoIcon } from './UndoIcon';
 export { default as RedoIcon } from './RedoIcon';
 export { default as SaveIcon } from './SaveIcon';
+export { default as ClearIcon } from './ClearIcon';

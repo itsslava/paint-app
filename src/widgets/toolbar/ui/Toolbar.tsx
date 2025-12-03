@@ -16,7 +16,7 @@ const toolFactory: Partial<Record<ToolType, new (canvas: HTMLCanvasElement) => T
 	eraser: Eraser,
 };
 
-type ActionKey = 'undo' | 'redo' | 'save';
+type ActionKey = 'undo' | 'redo' | 'save' | 'clear';
 
 const toolButtons: Array<{
 	key: ToolType;
@@ -38,6 +38,7 @@ const actionButtons: Array<{
 	{ key: 'undo', label: 'Undo', Icon: Icon.UndoIcon },
 	{ key: 'redo', label: 'Redo', Icon: Icon.RedoIcon },
 	{ key: 'save', label: 'Save', Icon: Icon.SaveIcon },
+	{ key: 'clear', label: 'Clear', Icon: Icon.ClearIcon },
 ];
 
 const ToolBar = observer(() => {
@@ -63,6 +64,9 @@ const ToolBar = observer(() => {
 			case 'save':
 				canvasState.downloadImage();
 				break;
+			case 'clear':
+				canvasState.clear();
+				break;
 		}
 	};
 
@@ -71,7 +75,7 @@ const ToolBar = observer(() => {
 			return true;
 		}
 
-		if (key === 'undo') {
+		if (key === 'undo' || key === 'clear') {
 			return !canvasState.canUndo;
 		}
 
