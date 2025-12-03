@@ -1,3 +1,5 @@
+import canvasState from '@shared/store/canvasState';
+
 export default abstract class Tool {
 	protected canvas: HTMLCanvasElement;
 	protected ctx: CanvasRenderingContext2D;
@@ -29,6 +31,7 @@ export default abstract class Tool {
 	}
 
 	private _onMouseDown = (e: MouseEvent): void => {
+		canvasState.saveCurrentToUndo();
 		this.onMouseDown(e);
 	};
 	private _onMouseMove = (e: MouseEvent): void => {

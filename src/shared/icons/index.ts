@@ -3,3 +3,5 @@ export { default as LineIcon } from './LineIcon';
 export { default as RectangleIcon } from './RectangleIcon';
 export { default as CircleIcon } from './CircleIcon';
 export { default as EraserIcon } from './EraserIcon';
+export { default as UndoIcon } from './UndoIcon';
+export { default as RedoIcon } from './RedoIcon';
