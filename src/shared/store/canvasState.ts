@@ -82,6 +82,33 @@ class CanvasState {
 	get canRedo() {
 		return this.redoStack.length > 0;
 	}
+
+	downloadImage(filename = 'drawing.png') {
+		if (!this.canvas) return;
+
+		const exportCanvas = document.createElement('canvas');
+		const exportCtx = exportCanvas.getContext('2d');
+		if (!exportCtx) return;
+
+		exportCanvas.width = this.canvas.width;
+		exportCanvas.height = this.canvas.height;
+
+		exportCtx.fillStyle = '#ffffff';
+		exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+		exportCtx.drawImage(this.canvas, 0, 0);
+
+		const dataUrl = exportCanvas.toDataURL('image/png');
+
+		const link = document.createElement('a');
+		link.href = dataUrl;
+		link.download = filename;
+
+		// firefox
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
 }
 
 const canvasState = new CanvasState();

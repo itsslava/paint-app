@@ -16,7 +16,7 @@ const toolFactory: Partial<Record<ToolType, new (canvas: HTMLCanvasElement) => T
 	eraser: Eraser,
 };
 
-type ActionKey = 'undo' | 'redo';
+type ActionKey = 'undo' | 'redo' | 'save';
 
 const toolButtons: Array<{
 	key: ToolType;
@@ -37,6 +37,7 @@ const actionButtons: Array<{
 }> = [
 	{ key: 'undo', label: 'Undo', Icon: Icon.UndoIcon },
 	{ key: 'redo', label: 'Redo', Icon: Icon.RedoIcon },
+	{ key: 'save', label: 'Save', Icon: Icon.SaveIcon },
 ];
 
 const ToolBar = observer(() => {
@@ -51,12 +52,34 @@ const ToolBar = observer(() => {
 		toolState.setTool(instance, key);
 	};
 
-	const handleAction = (key: string) => {
-		if (key === 'undo') {
-			canvasState.undo();
-		} else if (key === 'redo') {
-			canvasState.redo();
+	const handleAction = (key: ActionKey) => {
+		switch (key) {
+			case 'undo':
+				canvasState.undo();
+				break;
+			case 'redo':
+				canvasState.redo();
+				break;
+			case 'save':
+				canvasState.downloadImage();
+				break;
 		}
+	};
+
+	const getActionDisabled = (key: ActionKey): boolean => {
+		if (!canvasState.canvas) {
+			return true;
+		}
+
+		if (key === 'undo') {
+			return !canvasState.canUndo;
+		}
+
+		if (key === 'redo') {
+			return !canvasState.canRedo;
+		}
+
+		return false;
 	};
 
 	return (
@@ -79,7 +102,7 @@ const ToolBar = observer(() => {
 					<IconButton
 						key={key}
 						label={label}
-						disabled={key === 'undo' ? !canvasState.canUndo : !canvasState.canRedo}
+						disabled={getActionDisabled(key)}
 						onClick={() => handleAction(key)}
 					>
 						<Icon className={styles.toolbar__icon} />
