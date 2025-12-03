@@ -65,4 +65,8 @@ export default abstract class Tool {
 	set lineWidth(width: number) {
 		this.ctx.lineWidth = width;
 	}
+
+	get cursor(): string {
+		return 'crosshair';
+	}
 }

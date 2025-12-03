@@ -40,6 +40,13 @@ class ToolState {
 
 		this.tool.lineWidth = width;
 	}
+
+	get cursor(): string {
+		if (!this.tool) {
+			return 'default';
+		}
+		return this.tool.cursor;
+	}
 }
 
 const toolState = new ToolState();

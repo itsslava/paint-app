@@ -3,13 +3,14 @@ import styles from './canvas.module.scss';
 import canvasState from '@shared/store/canvasState';
 import Brush from '@shared/tools/brush';
 import toolState from '@shared/store/toolState';
+import { observer } from 'mobx-react-lite';
 
 type Props = {
 	width?: number;
 	height?: number;
 };
 
-const Canvas = ({ width = 800, height = 600 }: Props) => {
+const Canvas = observer(({ width = 800, height = 600 }: Props) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
 	useEffect(() => {
@@ -29,9 +30,9 @@ const Canvas = ({ width = 800, height = 600 }: Props) => {
 
 	return (
 		<div className={styles.canvas}>
-			<canvas ref={canvasRef} width={width} height={height} />
+			<canvas ref={canvasRef} width={width} height={height} style={{ cursor: toolState.cursor }} />
 		</div>
 	);
-};
+});
 
 export default Canvas;
