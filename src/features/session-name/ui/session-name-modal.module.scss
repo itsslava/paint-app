@@ -1,0 +1,64 @@
+@use '../../../shared/styles/variables' as v;
+
+.backdrop {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.45);
+	z-index: 1000;
+}
+
+.modal {
+	background: #fff;
+	padding: 32px 32px 24px;
+	border-radius: 18px;
+	min-width: 320px;
+	max-width: 380px;
+	box-shadow: 0 16px 40px rgba(15, 23, 42, 0.35);
+}
+
+.title {
+	margin: 0 0 20px;
+	text-align: center;
+	font-size: 20px;
+	font-weight: 700;
+	color: #020617;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.input {
+	padding: 10px 14px;
+	border: 1px solid #e2e8f0;
+	border-radius: 10px;
+	font-size: 14px;
+	outline: none;
+}
+
+.input:focus {
+	border-color: v.$accent-color;
+	box-shadow: 0 0 0 1px v.$accent-color;
+}
+
+.submitBtn {
+	margin-top: 8px;
+	padding: 12px 16px;
+	border-radius: 16px;
+	border: none;
+	background: v.$accent-color;
+	color: #fff;
+	font-size: 15px;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.submitBtn:disabled {
+	opacity: 0.6;
+	cursor: default;
+}

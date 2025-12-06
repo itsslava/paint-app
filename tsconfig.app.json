@@ -6,7 +6,8 @@
 			"@widgets/*": ["src/widgets/*"],
 			"@shared/*": ["src/shared/*"],
 			"@icons/*": ["src/shared/icons/*"],
-			"@styles/*": ["src/shared/styles/*"]
+			"@styles/*": ["src/shared/styles/*"],
+			"@features/*": ["src/features/*"]
 		},
 
 		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
