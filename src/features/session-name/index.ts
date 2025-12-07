@@ -1,1 +1,1 @@
-export { default as SessionNameModal } from './ui/SessionNameModal';
+export { default as SessionNameModal } from './SessionNameModal';
