@@ -8,9 +8,11 @@ import { observer } from 'mobx-react-lite';
 type Props = {
 	width?: number;
 	height?: number;
+	socket: WebSocket | null;
+	sessionId: string | null;
 };
 
-const Canvas = observer(({ width = 800, height = 600 }: Props) => {
+const Canvas = observer(({ width = 800, height = 600, socket, sessionId }: Props) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
 	useEffect(() => {
@@ -19,14 +21,15 @@ const Canvas = observer(({ width = 800, height = 600 }: Props) => {
 
 		canvasState.setCanvas(canvas);
 
-		const brush = new Brush(canvas);
+		const brush = new Brush(canvas, socket, sessionId);
 		toolState.setTool(brush, 'brush');
 
 		return () => {
+			brush.destroy();
 			canvasState.setCanvas(null);
 			toolState.setTool(null, null);
 		};
-	}, []);
+	}, [socket, sessionId]);
 
 	return (
 		<div className={styles.canvas}>

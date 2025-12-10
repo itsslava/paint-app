@@ -7,46 +7,107 @@ import { SettingsBar } from '@widgets/settings-bar';
 import { ToolBar } from '@widgets/toolbar';
 import { SessionNameModal } from '@features/session-name';
 import canvasState from '@shared/store/canvasState';
+import { Brush, Rectangle, Line, Circle, Eraser } from '@shared/tools';
+import type { DrawMessage, WsMessage } from '@shared/types/drawing';
+
+// TODO - username in ui, using useState
 
 const RoomPage = () => {
 	const { id } = useParams<{ id: string }>();
 
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
-	const [username, setUsername] = useState<string>('');
+	const [socket, setSocket] = useState<WebSocket | null>(null);
+
+	const drawHandler = (msg: DrawMessage) => {
+		const { figure } = msg;
+		const canvas = canvasState.canvas;
+		if (!canvas) return;
+
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+
+		if (figure.strokeColor) {
+			ctx.strokeStyle = figure.strokeColor;
+		}
+		if (figure.fillColor) {
+			ctx.fillStyle = figure.fillColor;
+		}
+		if (typeof figure.lineWidth === 'number') {
+			ctx.lineWidth = figure.lineWidth;
+		}
+
+		switch (figure.type) {
+			case 'brush':
+				Brush.draw(ctx, figure.x, figure.y);
+				break;
+			case 'eraser': {
+				const prevOp = ctx.globalCompositeOperation;
+				ctx.globalCompositeOperation = 'destination-out';
+
+				if (typeof figure.lineWidth === 'number') {
+					ctx.lineWidth = figure.lineWidth;
+				}
+
+				Eraser.draw(ctx, figure.x, figure.y);
+
+				ctx.globalCompositeOperation = prevOp;
+				break;
+			}
+			case 'rectangle': {
+				const width = figure.w ?? 0;
+				const height = figure.h ?? 0;
+				Rectangle.draw(ctx, figure.x, figure.y, width, height);
+				break;
+			}
+			case 'circle': {
+				const radius = figure.r ?? 0;
+				Circle.draw(ctx, figure.x, figure.y, radius);
+				break;
+			}
+			case 'line': {
+				const x2 = figure.x2 ?? figure.x;
+				const y2 = figure.y2 ?? figure.y;
+				Line.draw(ctx, figure.x, figure.y, x2, y2);
+				break;
+			}
+			case 'finish':
+				ctx.globalCompositeOperation = 'source-over';
+				ctx.beginPath();
+				break;
+			default:
+				console.log('Unknown figure type');
+		}
+	};
 
 	const handleNameSubmit = (name: string) => {
-		setUsername(name);
+		if (!id) {
+			console.log('No room id');
+			return;
+		}
+
 		canvasState.setUsername(name);
 		setIsModalOpen(false);
-	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const drawHandler = (msg: any) => {
-		console.log(msg);
-	};
-
-	useEffect(() => {
-		if (!id || !username) return;
-
-		const socket = new WebSocket('ws://localhost:5050/');
+		const ws = new WebSocket('ws://localhost:5050/');
 		console.log('trying to connect...');
 
-		canvasState.setSocket(socket);
+		setSocket(ws);
+		canvasState.setSocket(ws);
 		canvasState.setSessionId(id);
 
-		socket.onopen = () => {
+		ws.onopen = () => {
 			console.log('socket opened');
-			socket.send(
+			ws.send(
 				JSON.stringify({
 					id: id,
-					username: username,
+					username: name,
 					method: 'connection',
 				})
 			);
 		};
 
-		socket.onmessage = (event) => {
-			const msg = JSON.parse(event.data);
+		ws.onmessage = (event) => {
+			const msg: WsMessage = JSON.parse(event.data);
 			switch (msg.method) {
 				case 'connection':
 					console.log(`user ${msg.username} connected`);
@@ -54,25 +115,30 @@ const RoomPage = () => {
 				case 'draw':
 					drawHandler(msg);
 					break;
+				default:
+					console.log('Unknown method');
 			}
-			console.log('FROM SERVER:', msg);
 		};
 
-		socket.onerror = (event) => {
+		ws.onerror = (event) => {
 			console.log('WS ERROR:', event);
 		};
+	};
 
+	useEffect(() => {
 		return () => {
-			socket.close();
+			if (socket) {
+				socket.close();
+			}
 		};
-	}, [id, username]);
+	}, [socket]);
 
 	return (
 		<div className={styles.page}>
 			<SessionNameModal isOpen={isModalOpen} onSubmit={handleNameSubmit} />
 			<ToolBar />
 			<SettingsBar />
-			<Canvas />
+			<Canvas socket={socket} sessionId={id ?? null} />
 		</div>
 	);
 };
