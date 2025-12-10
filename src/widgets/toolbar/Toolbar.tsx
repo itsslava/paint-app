@@ -8,7 +8,12 @@ import * as Icon from '@shared/icons';
 import styles from './toolbar.module.scss';
 import type { JSX } from 'react';
 
-const toolFactory: Partial<Record<ToolType, new (canvas: HTMLCanvasElement) => Tool>> = {
+const toolFactory: Partial<
+	Record<
+		ToolType,
+		new (canvas: HTMLCanvasElement, socket?: WebSocket | null, id?: string | null) => Tool
+	>
+> = {
 	brush: Brush,
 	line: Line,
 	rectangle: Rectangle,
@@ -49,7 +54,10 @@ const ToolBar = observer(() => {
 		const ToolCtor = toolFactory[key];
 		if (!ToolCtor) return;
 
-		const instance = new ToolCtor(canvas);
+		const socket = canvasState.socket ?? null;
+		const sessionId = canvasState.sessionId ?? null;
+
+		const instance = new ToolCtor(canvas, socket, sessionId);
 		toolState.setTool(instance, key);
 	};
 
