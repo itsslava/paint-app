@@ -4,10 +4,17 @@ export default abstract class Tool {
 	protected canvas: HTMLCanvasElement;
 	protected ctx: CanvasRenderingContext2D;
 
-	constructor(canvas: HTMLCanvasElement) {
-		this.canvas = canvas;
+	socket: WebSocket | null;
+	id: string | null;
 
-		const context = this.canvas.getContext('2d');
+	constructor(canvas: HTMLCanvasElement, socket?: WebSocket | null, id?: string | null) {
+		this.canvas = canvas;
+		this.socket = socket ?? null;
+		this.id = id ?? null;
+
+		const context = this.canvas.getContext('2d', {
+			willReadFrequently: true,
+		} as CanvasRenderingContext2DSettings);
 
 		if (!context) {
 			throw new Error('Could not get 2D context from canvas');
