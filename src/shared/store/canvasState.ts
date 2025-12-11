@@ -3,13 +3,28 @@ import { makeAutoObservable } from 'mobx';
 class CanvasState {
 	canvas: HTMLCanvasElement | null = null;
 
+	socket: WebSocket | null = null;
+	sessionId: string | null = null;
+
 	private undoStack: string[] = [];
 	private redoStack: string[] = [];
+
+	username: string = '';
 
 	private readonly MAX_HISTORY = 20;
 
 	constructor() {
 		makeAutoObservable(this, {}, { autoBind: true });
+	}
+
+	setSessionId(id: string) {
+		this.sessionId = id;
+	}
+	setSocket(socket: WebSocket) {
+		this.socket = socket;
+	}
+	setUsername(username: string) {
+		this.username = username;
 	}
 
 	setCanvas(canvas: HTMLCanvasElement | null) {

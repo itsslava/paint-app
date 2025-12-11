@@ -1,0 +1,27 @@
+@use '../../shared/styles/variables' as v;
+
+.toolbar {
+	height: v.$bar-height;
+	background-color: #fff;
+	display: flex;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	width: 100%;
+	box-shadow: 0 4px 5px 0 rgb(205 205 205);
+	z-index: 990;
+	justify-content: space-between;
+	padding: 0 10px;
+
+	&__group {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	&__icon {
+		width: 28px;
+		height: 28px;
+		display: block;
+	}
+}

@@ -1,15 +1,14 @@
-import styles from './app.module.scss';
-import { Canvas } from '@widgets/canvas';
-import { SettingsBar } from '@widgets/settings-bar';
-import { ToolBar } from '@widgets/toolbar';
+import { RoomPage } from '@pages/room-page';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 function App() {
 	return (
-		<div className={styles.app}>
-			<ToolBar />
-			<SettingsBar />
-			<Canvas />
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route path="/:id" element={<RoomPage />} />
+				<Route path="*" element={<Navigate to={`/${(+new Date()).toString(16)}`} />} />
+			</Routes>
+		</BrowserRouter>
 	);
 }
 

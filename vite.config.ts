@@ -12,6 +12,8 @@ export default defineConfig({
 			'@shared': path.resolve(__dirname, 'src/shared'),
 			'@icons': path.resolve(__dirname, 'src/shared/icons'),
 			'@styles': path.resolve(__dirname, 'src/shared/styles'),
+			'@features': path.resolve(__dirname, 'src/features'),
+			'@pages': path.resolve(__dirname, 'src/pages'),
 		},
 	},
 });

@@ -7,8 +7,8 @@ export default class Circle extends Tool {
 
 	private startImage: ImageData | null = null;
 
-	constructor(canvas: HTMLCanvasElement) {
-		super(canvas);
+	constructor(canvas: HTMLCanvasElement, socket?: WebSocket | null, id?: string | null) {
+		super(canvas, socket, id ?? null);
 	}
 
 	protected override onMouseDown(e: MouseEvent): void {
@@ -31,19 +31,46 @@ export default class Circle extends Tool {
 		const radius = Math.sqrt(dx * dx + dy * dy);
 
 		this.ctx.putImageData(this.startImage, 0, 0);
-
-		this.draw(this.startX, this.startY, radius);
+		Circle.draw(this.ctx, this.startX, this.startY, radius);
 	}
-	protected override onMouseUp(): void {
-		if (!this.isDrawing) return;
+
+	protected override onMouseUp(e: MouseEvent): void {
+		if (!this.isDrawing || !this.startImage) return;
 		this.isDrawing = false;
+
+		const { x: currentX, y: currentY } = this.getPos(e);
+		const dx = currentX - this.startX;
+		const dy = currentY - this.startY;
+		const radius = Math.sqrt(dx * dx + dy * dy);
+
+		this.ctx.putImageData(this.startImage, 0, 0);
+		Circle.draw(this.ctx, this.startX, this.startY, radius);
+
 		this.startImage = null;
+
+		if (this.socket && this.id) {
+			this.socket.send(
+				JSON.stringify({
+					method: 'draw',
+					id: this.id,
+					figure: {
+						type: 'circle',
+						x: this.startX,
+						y: this.startY,
+						r: radius,
+						fillColor: this.ctx.fillStyle as string,
+						strokeColor: this.ctx.strokeStyle as string,
+						lineWidth: this.ctx.lineWidth,
+					},
+				})
+			);
+		}
 	}
 
-	private draw(x: number, y: number, radius: number): void {
-		this.ctx.beginPath();
-		this.ctx.arc(x, y, radius, 0, Math.PI * 2);
-		this.ctx.stroke();
-		this.ctx.fill();
+	static draw(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number): void {
+		ctx.beginPath();
+		ctx.arc(x, y, radius, 0, Math.PI * 2);
+		ctx.stroke();
+		ctx.fill();
 	}
 }
