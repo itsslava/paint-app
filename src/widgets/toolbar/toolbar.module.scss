@@ -24,4 +24,67 @@
 		height: 28px;
 		display: block;
 	}
+
+	&__center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 1 1 auto;
+	}
+
+	&__session {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		font-size: 14px;
+		color: #424242;
+		white-space: nowrap;
+	}
+
+	&__status {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	&__status-text {
+		font-size: 13px;
+		color: #616161;
+	}
+
+	&__status-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 9999px;
+		background-color: #bdbdbd;
+
+		&--online {
+			background-color: #4caf50;
+		}
+
+		&--connecting {
+			background-color: #ffb300;
+		}
+
+		&--error {
+			background-color: #e53935;
+		}
+
+		&--idle {
+			background-color: #9e9e9e;
+		}
+	}
+
+	&__mode {
+		font-weight: 500;
+		color: #212121;
+	}
+
+	&__username {
+		padding: 2px 8px;
+		border-radius: 9999px;
+		background-color: #e0e0e0;
+		font-size: 13px;
+		color: #212121;
+	}
 }

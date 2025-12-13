@@ -1,4 +1,6 @@
 import { observer } from 'mobx-react-lite';
+import type { JSX } from 'react';
+
 import toolState, { type ToolType } from '@shared/store/toolState';
 import canvasState from '@shared/store/canvasState';
 import { IconButton } from '@shared/ui';
@@ -6,7 +8,6 @@ import { Brush, Circle, Eraser, Line, Rectangle, Tool } from '@shared/tools';
 import * as Icon from '@shared/icons';
 
 import styles from './toolbar.module.scss';
-import type { JSX } from 'react';
 
 const toolFactory: Partial<
 	Record<
@@ -94,6 +95,34 @@ const ToolBar = observer(() => {
 		return false;
 	};
 
+	const { sessionMode, connectionStatus, username } = canvasState;
+
+	const statusLabel = (() => {
+		switch (connectionStatus) {
+			case 'online':
+				return 'Online';
+			case 'connecting':
+				return 'Connecting...';
+			case 'error':
+				return 'Error';
+			case 'idle':
+			default:
+				return sessionMode === 'shared' ? 'Disconnected' : 'Offline';
+		}
+	})();
+
+	const modeLabel = sessionMode === 'shared' ? 'Shared mode' : 'Local mode';
+
+	const statusDotClassName = [
+		styles['toolbar__status-dot'],
+		connectionStatus === 'online' && styles['toolbar__status-dot--online'],
+		connectionStatus === 'connecting' && styles['toolbar__status-dot--connecting'],
+		connectionStatus === 'error' && styles['toolbar__status-dot--error'],
+		connectionStatus === 'idle' && styles['toolbar__status-dot--idle'],
+	]
+		.filter(Boolean)
+		.join(' ');
+
 	return (
 		<div className={styles.toolbar} role="toolbar" aria-label="Drawing tools">
 			<div className={styles.toolbar__group} role="group" aria-label="Tools">
@@ -108,6 +137,20 @@ const ToolBar = observer(() => {
 						<Icon className={styles.toolbar__icon} />
 					</IconButton>
 				))}
+			</div>
+			<div className={styles['toolbar__center']}>
+				<div className={styles['toolbar__session']} aria-label="Session status">
+					<div className={styles['toolbar__status']}>
+						<span className={statusDotClassName} aria-hidden="true" />
+						<span className={styles['toolbar__status-text']}>{statusLabel}</span>
+					</div>
+					<span className={styles['toolbar__mode']}>{modeLabel}</span>
+					{username && (
+						<span className={styles['toolbar__username']} title={username}>
+							{username}
+						</span>
+					)}
+				</div>
 			</div>
 			<div className={styles.toolbar__group} role="group" aria-label="Actions">
 				{actionButtons.map(({ key, label, Icon }) => (
