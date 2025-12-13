@@ -9,14 +9,14 @@ import { loadRoomImage } from '@shared/api/image';
 type Props = {
 	width?: number;
 	height?: number;
-	socket: WebSocket | null;
-	sessionId: string | null;
 };
 
-const Canvas = observer(({ width = 800, height = 600, socket, sessionId }: Props) => {
+const Canvas = observer(({ width = 800, height = 600 }: Props) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-	// 1) Маунтим канвас в стор один раз
+	const socket = canvasState.socket;
+	const sessionId = canvasState.sessionId;
+
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
@@ -28,7 +28,6 @@ const Canvas = observer(({ width = 800, height = 600, socket, sessionId }: Props
 		};
 	}, []);
 
-	// 2) Создаём / пересоздаём базовый инструмент, когда меняются socket/sessionId
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
@@ -42,33 +41,12 @@ const Canvas = observer(({ width = 800, height = 600, socket, sessionId }: Props
 		};
 	}, [socket, sessionId]);
 
-	// 3) Подгружаем сохранённое изображение комнаты
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas || !sessionId) return;
 
 		loadRoomImage(sessionId, canvas);
 	}, [sessionId]);
-
-	// useEffect(() => {
-	// 	const canvas = canvasRef.current;
-	// 	if (!canvas) return;
-
-	// 	canvasState.setCanvas(canvas);
-
-	// 	const brush = new Brush(canvas, socket, sessionId);
-	// 	toolState.setTool(brush, 'brush');
-
-	// 	if (sessionId) {
-	// 		loadRoomImage(sessionId, canvas);
-	// 	}
-
-	// 	return () => {
-	// 		brush.destroy();
-	// 		canvasState.setCanvas(null);
-	// 		toolState.setTool(null, null);
-	// 	};
-	// }, [socket, sessionId]);
 
 	return (
 		<div className={styles.canvas}>
