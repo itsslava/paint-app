@@ -47,7 +47,12 @@ const actionButtons: Array<{
 	{ key: 'clear', label: 'Clear', Icon: Icon.ClearIcon },
 ];
 
-const ToolBar = observer(() => {
+type Props = {
+	onStartSharing?: () => void;
+	onStopSharing?: () => void;
+};
+
+const ToolBar = observer(({ onStartSharing, onStopSharing }: Props) => {
 	const handleSelect = (key: ToolType) => {
 		const canvas = canvasState.canvas;
 		if (!canvas) return;
@@ -123,6 +128,26 @@ const ToolBar = observer(() => {
 		.filter(Boolean)
 		.join(' ');
 
+	const isShared = sessionMode === 'shared';
+	const sharingButtonLabel = isShared ? 'Stop Sharing' : 'Start Sharing';
+	const sharingButtonDisabled = connectionStatus === 'connecting';
+
+	const handleSharing = () => {
+		if (isShared) {
+			if (onStopSharing) {
+				onStopSharing();
+			} else {
+				canvasState.stopSharing();
+			}
+		} else {
+			if (onStartSharing) {
+				onStartSharing();
+			} else {
+				console.log('Start sharing click handler is not provided');
+			}
+		}
+	};
+
 	return (
 		<div className={styles.toolbar} role="toolbar" aria-label="Drawing tools">
 			<div className={styles.toolbar__group} role="group" aria-label="Tools">
@@ -145,6 +170,14 @@ const ToolBar = observer(() => {
 						<span className={styles['toolbar__status-text']}>{statusLabel}</span>
 					</div>
 					<span className={styles['toolbar__mode']}>{modeLabel}</span>
+					<button
+						type="button"
+						className={styles['toolbar__session-button']}
+						onClick={handleSharing}
+						disabled={sharingButtonDisabled}
+					>
+						{sharingButtonLabel}
+					</button>
 					{username && (
 						<span className={styles['toolbar__username']} title={username}>
 							{username}

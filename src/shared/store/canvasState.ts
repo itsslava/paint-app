@@ -69,6 +69,10 @@ class CanvasState {
 		this.sessionMode = 'shared';
 		this.connectionStatus = 'connecting';
 
+		if (this.canvas) {
+			saveRoomImage(roomId, this.canvas);
+		}
+
 		const ws = new WebSocket('ws://localhost:5050/');
 		this.socket = ws;
 
